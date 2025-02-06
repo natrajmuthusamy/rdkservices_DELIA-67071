@@ -105,7 +105,8 @@ const string WPEFramework::Plugin::Bluetooth::STATUS_CONNECTION_CHANGE = "CONNEC
 const string WPEFramework::Plugin::Bluetooth::STATUS_DISCOVERY_STARTED = "DISCOVERY_STARTED";
 const string WPEFramework::Plugin::Bluetooth::STATUS_DISCOVERY_COMPLETED = "DISCOVERY_COMPLETED";
 const string WPEFramework::Plugin::Bluetooth::STATUS_PAIRING_FAILED = "PAIRING_FAILED";
-const string WPEFramework::Plugin::Bluetooth::STATUS_CONNECTION_FAILED= "CONNECTION_FAILED";
+const string WPEFramework::Plugin::Bluetooth::STATUS_CONNECTION_FAILED = "CONNECTION_FAILED";
+const string WPEFramework::Plugin::Bluetooth::STATUS_DEVICE_UNSUPPORTED = "DeviceUnsupported";
 
 const string WPEFramework::Plugin::Bluetooth::CMD_AUDIO_CTRL_PLAY = "PLAY";
 const string WPEFramework::Plugin::Bluetooth::CMD_AUDIO_CTRL_STOP = "STOP";
@@ -1184,6 +1185,21 @@ namespace WPEFramework
                     }
 
                     eventId = EVT_DEVICE_MEDIA_STATUS;
+                    break;
+
+                case BTRMGR_EVENT_DEVICE_UNSUPPORTED:
+                    LOGERR("Received %s Event from BTRMgr", C_STR(STATUS_DEVICE_UNSUPPORTED));
+                    params["newStatus"] = STATUS_PAIRING_FAILED;
+                    params["deviceID"] = std::to_string(eventMsg.m_discoveredDevice.m_deviceHandle);
+                    params["name"] = string(eventMsg.m_discoveredDevice.m_name);
+                    params["deviceType"] = BTRMGR_GetDeviceTypeAsString(eventMsg.m_discoveredDevice.m_deviceType);
+                    params["rawDeviceType"] = std::to_string(eventMsg.m_discoveredDevice.m_ui32DevClassBtSpec);
+                    params["rawBleDeviceType"] = std::to_string(eventMsg.m_discoveredDevice.m_ui16DevAppearanceBleSpec);
+                    params["lastConnectedState"] = eventMsg.m_discoveredDevice.m_isLastConnectedDevice ? true : false;
+                    params["paired"] = eventMsg.m_discoveredDevice.m_isPairedDevice ? true : false;
+                    params["connected"] = eventMsg.m_discoveredDevice.m_isConnected ? true : false;
+
+                    eventId = STATUS_DEVICE_UNSUPPORTED;
                     break;
 
                     // TODO: implement or delete these values from enum

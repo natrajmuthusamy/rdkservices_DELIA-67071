@@ -1234,6 +1234,54 @@
                 ]
             }
         },
+        "DeviceUnsupported": {
+            "summary": "Triggered when the previous request to pair failed due to an unsupported device.",
+            "params": {
+                "type":"object",
+                "properties": {
+                    "newStatus": {
+                        "$ref": "#/definitions/newStatus"
+                    },
+                    "deviceID": {
+                        "$ref": "#/definitions/deviceID"
+                    },
+                    "name": {
+                        "$ref": "#/definitions/name"
+                    },
+                    "deviceType": {
+                        "$ref": "#/definitions/deviceType"
+                    },
+                    "rawDeviceType": {
+                        "$ref": "#/definitions/rawDeviceType"
+                    },
+                    "rawBleDeviceType": {
+                        "$ref": "#/definitions/rawBleDeviceType"
+                    },
+                    "lastConnectedState": {
+                        "$ref": "#/definitions/lastConnectedState"
+                    },
+                    "paired": {
+                        "$ref": "#/definitions/paired"
+                    },
+                    "connected":{
+                        "summary": "Whether the device is connected. `true` if the device is connected when the `CONNECTION_CHANGE` status is sent. `false` if the device is disconnected.",
+                        "type":"boolean",
+                        "example": "true"
+                    }
+                },
+                "required": [
+                    "newStatus",
+                    "deviceID",
+                    "name",
+                    "deviceType",
+                    "rawDeviceType",
+                    "rawBleDeviceType",
+                    "lastConnectedState",
+                    "paired",
+                    "connected"
+                ]
+            }
+        },
         "onStatusChanged": {
             "summary": "Triggered when the Bluetooth functionality status changes. Supported statuses are:  \n* `PAIRING_CHANGE` - Pairing status changed. Applications get the device which got paired/unpaired as part of this message, but it's up to the application to obtain an updated list of paired devices by calling [getPairedDevices](#method.getpaireddevices).  \n* `CONNECTION_CHANGE` - one or more Bluetooth connections changed status. Applications get the device that got connected/disconnected as part of this message, but it's up to the application to obtain an updated list of connected devices by calling [getConnectedDevices](#method.getconnecteddevices).  \n* `DISCOVERY_COMPLETED` - Bluetooth device discovery is complete, at least one device is available. Applications should obtain an updated list of discovered devices by calling [getDiscoveredDevices](#method.getdiscovereddevices)  \n* `DISCOVERY_STARTED`- The Bluetooth device discovery will be triggered, after startScan method started.",
             "params": {
